@@ -1,97 +1,106 @@
 import './charInfo.scss';
 
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Spinner from '../spinner/Spinner';
 import ErrorMassage from '../errorMassage/ErrorMassage';
 import Skeleton from '../skeleton/Skeleton';
 import MarvelService from '../../services/MarvelService';
 
-class CharInfo extends Component {
+const CharInfo = (props) => {
 
-    state = {
-        char: null,
-        loading: false,
-        error: false
-    }
+    // state = {
+    //     char: null,
+    //     loading: false,
+    //     error: false
+    // }
+    const [char, setChar] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
 
-    marvelService = new MarvelService();
+    const marvelService = new MarvelService();
 
-    componentDidMount() {
-        this.updateChar();
-    }
+    // componentDidMount() {
+    //     this.updateChar();
+    // }
 
-    componentDidUpdate(preProps) {
-        if (preProps !== this.props) {
-            this.updateChar();
-        }
-    }
+    useEffect(() => {
+        updateChar()
+    }, [props])
 
-    updateChar = () => {
-        const {selectedChar} = this.props
+    // componentDidUpdate(preProps) {
+    //     if (preProps !== this.props) {
+    //         this.updateChar();
+    //     }
+    // }
+
+    const updateChar = () => {
+        const {selectedChar} = props
 
         if (!selectedChar) {
             return;
         }
 
-        this.onCharLoading()
+        onCharLoading()
         
-        this.marvelService
+        marvelService
             .getCharacter(selectedChar)
-            .then(this.onCharLoaded)
-            .catch(this.onError)
+            .then(onCharLoaded)
+            .catch(onError)
     }
 
-    onCharLoaded = (char) => {
-        this.setState({
-            char,
-            loading: false
-        });
+    const onCharLoaded = (char) => {
+        // this.setState({
+        //     char,
+        //     loading: false
+        // });
+        setChar(char);
+        setLoading(false);
     }
     
-    onCharLoading = () => {
-        this.setState({
-            loading: true
-        })
+    const onCharLoading = () => {
+        // this.setState({
+        //     loading: true
+        // })
+        setLoading(true);
     }
 
-    onError = (err) => {
+    const onError = (err) => {
         console.log(err)
-        this.setState({
-            loading: false,
-            error: true
-        })
+        // this.setState({
+        //     loading: false,
+        //     error: true
+        // })
+        setLoading(false);
+        setError(true);
     }
 
-    render() {
-        const {char, error, loading} = this.state
-        const errorMassage = error ? <ErrorMassage/> : null;
-        const spinner = loading ? <Spinner/> : null;
-        const content = !(loading || error || !char) ? <View char={char}/> : null;
-        const skeleton = char || loading || error  ? null : <Skeleton/>;
+    const errorMassage = error ? <ErrorMassage/> : null;
+    const spinner = loading ? <Spinner/> : null;
+    const content = !(loading || error || !char) ? <View char={char}/> : null;
+    const skeleton = char || loading || error  ? null : <Skeleton/>;
 
-        return (
-            <div className="char__info">
-                {skeleton}
-                {errorMassage}
-                {spinner}
-                {content}
-            </div>
-        )
-    }
+    return (
+        <div className="char__info">
+            {skeleton}
+            {errorMassage}
+            {spinner}
+            {content}
+        </div>
+    )
 }
 
 const View = ({char}) => {
     const {name, description, thumbnail, homepage, wiki, comics} = char;
     let checkedDescription = ''
 
-    if (description === 'undefined' || description === '') {
+    if (description === '') {
         checkedDescription =  `Out of description`
     } else {
         checkedDescription = description;
     }
 
-    const defultImage = thumbnail.indexOf('image_not_available') > -1 ? {'objectFit': 'contain'} : null;
+    const defultImage = thumbnail.indexOf('image_not_available') > -1 ? {'objectFit': 'contain'} : {'objectFit' : 'cover'};
 
     const comicsRender = comics.map((elem, i) => {
         return (
