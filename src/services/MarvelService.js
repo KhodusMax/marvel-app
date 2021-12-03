@@ -9,7 +9,6 @@ class MarvelService {
         if (!res.ok) {
             throw new Error(`Fatch error: ${url}, status: ${res.status}`)
         }
-
         return await res.json();
     }
 

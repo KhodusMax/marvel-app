@@ -8,12 +8,6 @@ import MarvelService from '../../services/MarvelService';
 
 const RandomChar = (props) => {
 
-    // state = {
-    //     char: {},
-    //     loading: true,
-    //     error: false
-    // }
-
     const [char, setChar] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
@@ -24,33 +18,20 @@ const RandomChar = (props) => {
         updateChar();
     }, [])
 
-    // componentDidMount() {
-    //     this.updateChar();
-    // }
-
-    const onCharLoaded = (char) => {
-        // this.setState({
-        //     char,
-        //     loading: false
-        // });
-        setChar(() => char);
-        setLoading(() => false);
+    const onCharLoaded = (newChar) => {
+        setLoading(false);
+        setChar(newChar);
     }
     
     const onCharLoading = () => {
-        // this.setState({
-        //     loading: true
-        // })
-        setLoading(() => true);
+        setLoading(true);
+        setError(false);
     }
 
-    const onError = () => {
-        // this.setState({
-        //     loading: false,
-        //     error: true
-        // })
-        setLoading(() => false);
-        setError(() => true)
+    const onError = (err) => {
+        console.log(err)
+        setError(true)
+        setLoading(false);
     }
 
     const updateChar = () => {
@@ -61,10 +42,9 @@ const RandomChar = (props) => {
             .then(onCharLoaded)
             .catch(onError)
     }
-
     const errorMassage = error ? <ErrorMassage/> : null;
     const spinner = loading ? <Spinner/> : null;
-    const content = !(loading || error) ? <View char={char}/> : null;
+    const content = !(loading || error || !char) ? <View char={char}/> : null;
 
     return (
         <div className="randomchar">
@@ -90,17 +70,18 @@ const RandomChar = (props) => {
 
 const View = ({char}) => {
     const {name, description, thumbnail, homepage, wiki} = char;
-    let checked = ''
+    let checked = '';
 
-    if (description === 'undefined' || description === '') {
+    if (description === '') {
         checked =  `Out of description`
-    } else if (description.length > 50) {
+    } else if (description && description.length > 50) {
         checked =  `${description.slice(0, 200)}...`;
     } else {
         checked = description;
     }
 
-    const defultImage = thumbnail.indexOf('image_not_available') > -1 ? {'objectFit': 'contain'} : null;
+    const defultImage = thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg' ? {'objectFit': 'contain'} : {'objectFit' : 'cover'};
+
 
     return ( <div className="randomchar__block">
                 <img src={thumbnail} alt="Random character" style={defultImage} className="randomchar__img"/>

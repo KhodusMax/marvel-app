@@ -1,11 +1,10 @@
 import { Component } from "react";
 import ErrorMassage from "../errorMassage/ErrorMassage";
 
-export default class ErrorBoundary extends Component {
+class ErrorBoundary extends Component {
     state = {
         error: false
     }
-
     componentDidCatch(error, errorInfo) {
         console.log(error, errorInfo);
 
@@ -20,3 +19,5 @@ export default class ErrorBoundary extends Component {
         return this.props.children;
     }
 }
+
+export default ErrorBoundary;
