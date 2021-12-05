@@ -5,34 +5,17 @@ import PropTypes from 'prop-types';
 import Spinner from '../spinner/Spinner';
 import ErrorMassage from '../errorMassage/ErrorMassage';
 import Skeleton from '../skeleton/Skeleton';
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 
 const CharInfo = (props) => {
 
-    // state = {
-    //     char: null,
-    //     loading: false,
-    //     error: false
-    // }
     const [char, setChar] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
 
-    const marvelService = new MarvelService();
-
-    // componentDidMount() {
-    //     this.updateChar();
-    // }
+    const {loading, error, getCharacter,  getAllCharacters, clearError} = useMarvelService();
 
     useEffect(() => {
         updateChar()
     }, [props])
-
-    // componentDidUpdate(preProps) {
-    //     if (preProps !== this.props) {
-    //         this.updateChar();
-    //     }
-    // }
 
     const updateChar = () => {
         const {selectedChar} = props
@@ -41,38 +24,14 @@ const CharInfo = (props) => {
             return;
         }
 
-        onCharLoading()
+        clearError();
         
-        marvelService
-            .getCharacter(selectedChar)
+        getCharacter(selectedChar)
             .then(onCharLoaded)
-            .catch(onError)
     }
 
     const onCharLoaded = (char) => {
-        // this.setState({
-        //     char,
-        //     loading: false
-        // });
         setChar(char);
-        setLoading(false);
-    }
-    
-    const onCharLoading = () => {
-        // this.setState({
-        //     loading: true
-        // })
-        setLoading(true);
-    }
-
-    const onError = (err) => {
-        console.log(err)
-        // this.setState({
-        //     loading: false,
-        //     error: true
-        // })
-        setLoading(false);
-        setError(true);
     }
 
     const errorMassage = error ? <ErrorMassage/> : null;
