@@ -8,14 +8,6 @@ import MarvelService from '../../services/MarvelService';
 
 const CharList = (props) => {
 
-    // state = {
-    //     chars: [],
-    //     loading: true,
-    //     error: false,
-    //     newCharsLoding: false,
-    //     offset: 210,
-    //     charsEnded: false
-    // }
     const [chars, setChars] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
@@ -24,10 +16,6 @@ const CharList = (props) => {
     const [charsEnded, setCharsEnded] = useState(false);
 
     const marvelService = new MarvelService();
-
-    // componentDidMount() {
-    //     this.updateChars();
-    // }
 
     useEffect(() => {
         updateChars();
@@ -42,9 +30,6 @@ const CharList = (props) => {
     }
 
     const onCharsLoding = () => {
-        // this.setState({
-        //     newCharsLoding: true
-        // })
         setNewCharsLoading(() => true);
     }
 
@@ -54,13 +39,6 @@ const CharList = (props) => {
             ended = true
         }
 
-        // this.setState(({offset, chars}) => ({
-        //     chars: [...chars, ...newChars],
-        //     loading: false,
-        //     newCharsLoding: false,
-        //     offset: offset + 9,
-        //     charsEnded: ended
-        // }));
         setChars((chars) => [...chars, ...newChars]);
         setLoading(() => false);
         setNewCharsLoading(() => false);
@@ -68,28 +46,12 @@ const CharList = (props) => {
         setCharsEnded(() => ended);
     }
 
-    // const charSelect = (elem) => {
-    //     const {onSelectedChar} = props;
-
-    //     console.log(elem.target.parentElement)
-    //     onSelectedChar(1011101)
-        
-    // }
-
     const onError = () => {
-        // this.setState({
-        //     loading: false,
-        //     error: true
-        // })
         setError(() => true);
         setLoading(() => false);
     }
 
     const items = useRef([]);
-
-    // setRef = (ref) => {
-    //     this.items.push(ref);
-    // }
 
     const focusOnItem = (id) => {
         items.current.forEach(item => item.classList.remove('char__item_selected'));
@@ -131,10 +93,9 @@ const CharList = (props) => {
 
     return (
         <div className="char__list">
-
+            {errorMassage}
+            {spinner}
             <ul className="char__grid">
-                {errorMassage}
-                {spinner}
                 {content}
             </ul>
             <button className="button button__main button__long"
