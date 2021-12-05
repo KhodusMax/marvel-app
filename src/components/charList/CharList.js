@@ -4,33 +4,26 @@ import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Spinner from '../spinner/Spinner';
 import ErrorMassage from '../errorMassage/ErrorMassage';
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 
 const CharList = (props) => {
 
     const [chars, setChars] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
     const [newCharsLoading, setNewCharsLoading] = useState(false);
     const [offset, setOffset] = useState(210);
     const [charsEnded, setCharsEnded] = useState(false);
 
-    const marvelService = new MarvelService();
+    const {loading, error, getAllCharacters, clearError} = useMarvelService();
 
     useEffect(() => {
-        updateChars();
+        updateChars(offset, true);
     }, []);
 
-    const updateChars = (offset) => {
-        onCharsLoding();
-        marvelService
-            .getAllCharacters(offset)
+    const updateChars = (offset, initial) => {
+        clearError();
+        initial ? setNewCharsLoading(false) : setNewCharsLoading(true)
+        getAllCharacters(offset)
             .then(onCharsLoaded)
-            .catch(onError)
-    }
-
-    const onCharsLoding = () => {
-        setNewCharsLoading(() => true);
     }
 
     const onCharsLoaded = (newChars) => {
@@ -40,15 +33,9 @@ const CharList = (props) => {
         }
 
         setChars((chars) => [...chars, ...newChars]);
-        setLoading(() => false);
         setNewCharsLoading(() => false);
         setOffset((offset) =>offset + 9);
         setCharsEnded(() => ended);
-    }
-
-    const onError = () => {
-        setError(() => true);
-        setLoading(() => false);
     }
 
     const items = useRef([]);
@@ -88,15 +75,14 @@ const CharList = (props) => {
     })
 
     const errorMassage = error ? <ErrorMassage/> : null;
-    const spinner = loading ? <Spinner/> : null;
-    const content = !(loading || error) ? toRender : null;
+    const spinner = loading && !newCharsLoading ? <Spinner/> : null;
 
     return (
         <div className="char__list">
             {errorMassage}
             {spinner}
             <ul className="char__grid">
-                {content}
+                {toRender}
             </ul>
             <button className="button button__main button__long"
             onClick={() => updateChars(offset)}
