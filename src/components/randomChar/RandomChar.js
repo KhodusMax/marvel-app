@@ -3,44 +3,42 @@ import mjolnir from '../../resources/img/mjolnir.png';
 import { useState, useEffect } from 'react';
 import Spinner from '../spinner/Spinner';
 import ErrorMassage from '../errorMassage/ErrorMassage';
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 
 
 const RandomChar = (props) => {
 
     const [char, setChar] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+    // const [loading, setLoading] = useState(true);
+    // const [error, setError] = useState(false);
 
-    const marvelService = new MarvelService();
+    const {loading, error, getCharacter,  getAllCharacters, clearError} = useMarvelService();
 
     useEffect(() => {
         updateChar();
     }, [])
 
     const onCharLoaded = (newChar) => {
-        setLoading(false);
+        // setLoading(false);
         setChar(newChar);
     }
     
-    const onCharLoading = () => {
-        setLoading(true);
-        setError(false);
-    }
+    // const onCharLoading = () => {
+    //     setLoading(true);
+    //     setError(false);
+    // }
 
-    const onError = (err) => {
-        console.log(err)
-        setError(true)
-        setLoading(false);
-    }
+    // const onError = (err) => {
+    //     console.log(err)
+    //     setError(true)
+    //     setLoading(false);
+    // }
 
     const updateChar = () => {
         const id = Math.floor(Math.random() * (1011400-1011000) + 1011000);
-        onCharLoading()
-        marvelService
-            .getCharacter(id)
+        clearError()
+        getCharacter(id)
             .then(onCharLoaded)
-            .catch(onError)
     }
     const errorMassage = error ? <ErrorMassage/> : null;
     const spinner = loading ? <Spinner/> : null;
