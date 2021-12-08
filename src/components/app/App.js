@@ -4,7 +4,7 @@ import AppHeader from "../appHeader/AppHeader";
 import CharsPage from "../pages/CharsPage";
 import ComicsPage from "../pages/ComicsPage";
 import SingleComicPage from "../pages/singleComicPage/SingleComicPage";
-import ErrorMassage from "../errorMassage/ErrorMassage";
+import PageNotFound from "../pages/404";
 
 const App = () => {
 
@@ -17,7 +17,7 @@ const App = () => {
                             <Route path='/' element={<CharsPage/>}/>
                             <Route path='comics' element={<ComicsPage/>}/>
                             <Route path='comics/:comicId' element={<SingleComicPage/>}/>
-                            <Route path='*' element={<ErrorMassage/>}/>
+                            <Route path='*' element={<PageNotFound/>}/>
                     </Routes>
                 </main>
             </Router>
