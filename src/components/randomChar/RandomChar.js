@@ -6,33 +6,17 @@ import ErrorMassage from '../errorMassage/ErrorMassage';
 import useMarvelService from '../../services/MarvelService';
 
 
-const RandomChar = (props) => {
-
+const RandomChar = () => {
     const [char, setChar] = useState({});
-    // const [loading, setLoading] = useState(true);
-    // const [error, setError] = useState(false);
-
-    const {loading, error, getCharacter,  getAllCharacters, clearError} = useMarvelService();
+    const {loading, error, getCharacter, clearError} = useMarvelService();
 
     useEffect(() => {
         updateChar();
     }, [])
 
     const onCharLoaded = (newChar) => {
-        // setLoading(false);
         setChar(newChar);
     }
-    
-    // const onCharLoading = () => {
-    //     setLoading(true);
-    //     setError(false);
-    // }
-
-    // const onError = (err) => {
-    //     console.log(err)
-    //     setError(true)
-    //     setLoading(false);
-    // }
 
     const updateChar = () => {
         const id = Math.floor(Math.random() * (1011400-1011000) + 1011000);
