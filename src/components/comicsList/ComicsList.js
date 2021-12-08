@@ -40,11 +40,11 @@ const ComicsList = (props) => {
 
     const items = useRef([]);
 
-    const focusOnItem = (id) => {
-        items.current.forEach(item => item.classList.remove('char__item_selected'));
-        items.current[id].classList.add('char__item_selected');
-        items.current[id].focus();
-    }
+    // const focusOnItem = (id) => {
+    //     items.current.forEach(item => item.classList.remove('char__item_selected'));
+    //     items.current[id].classList.add('char__item_selected');
+    //     items.current[id].focus();
+    // }
 
         const {onSelectedComics} = props;
 
@@ -58,12 +58,12 @@ const ComicsList = (props) => {
                 id={id}
                 onClick={() => {
                     onSelectedComics(id);
-                    focusOnItem(i)
+                    // focusOnItem(i)
                 }}
                 onKeyPress={(e) => {
                     if (e.key === ' ' || e.key === "Enter") {
                         onSelectedComics(id);
-                        focusOnItem(i);
+                        // focusOnItem(i);
                     }}}
                 ref={elem => items.current[i] = elem}>
                     <a href="#">
