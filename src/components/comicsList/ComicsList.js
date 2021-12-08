@@ -1,12 +1,16 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
 import PropTypes from 'prop-types';
+
 import useMarvelService from '../../services/MarvelService';
+
 import Spinner from '../spinner/Spinner';
 import ErrorMassage from '../errorMassage/ErrorMassage';
 
 import './comicsList.scss';
 
-const ComicsList = (props) => {
+const ComicsList = () => {
     
     const [comics, setComics] = useState([]);
     const [newComicsLoading, setNewComicsLoading] = useState(false);
@@ -38,42 +42,22 @@ const ComicsList = (props) => {
         setComicsEnded(ended);
     }
 
-    const items = useRef([]);
+    const toRender = comics.map((comics, i) => {
+        const {id, title, thumbnail, price} = comics;
 
-    // const focusOnItem = (id) => {
-    //     items.current.forEach(item => item.classList.remove('char__item_selected'));
-    //     items.current[id].classList.add('char__item_selected');
-    //     items.current[id].focus();
-    // }
-
-        const {onSelectedComics} = props;
-
-        const toRender = comics.map((comics, i) => {
-            const {id, title, description, pageCount, thumbnail, language, price} = comics;
-
-            return (
-                <li className="comics__item"
-                tabIndex={0} 
-                key={id}
-                id={id}
-                onClick={() => {
-                    onSelectedComics(id);
-                    // focusOnItem(i)
-                }}
-                onKeyPress={(e) => {
-                    if (e.key === ' ' || e.key === "Enter") {
-                        onSelectedComics(id);
-                        // focusOnItem(i);
-                    }}}
-                ref={elem => items.current[i] = elem}>
-                    <a href="#">
-                        <img src={thumbnail} alt={title} className="comics__item-img"/>
-                        <div className="comics__item-name">{title}</div>
-                        <div className="comics__item-price">{price}</div>
-                    </a>
-                </li>
-            )
-        })
+        return (
+            <li className="comics__item"
+            tabIndex={0} 
+            key={i}
+            id={id}>
+                <Link to={`${id}`}>
+                    <img src={thumbnail} alt={title} className="comics__item-img"/>
+                    <div className="comics__item-name">{title}</div>
+                    <div className="comics__item-price">{price}</div>
+                </Link>
+            </li>
+        )
+    })
 
     const errorMassage = error ? <ErrorMassage/> : null;
     const spinner = loading && !newComicsLoading ? <Spinner/> : null;
