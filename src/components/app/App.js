@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+// import { useState } from "react";
+>>>>>>> 6fc580411bcdbbebeb8d5cc8e2208f835005dfdf
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import AppHeader from "../appHeader/AppHeader";
